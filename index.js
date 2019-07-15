@@ -1,4 +1,10 @@
-whitelist = [ "zibri.org$", "test\\..*" ];  // regexp for whitelisted urls
+/*
+CORS Anywhere as a Cloudflare Worker!
+(c) 2019 by Zibri (www.zibri.org)
+email: zibri AT zibri DOT org
+*/
+
+whitelist = [ "^http.?://www.zibri.org$", "zibri.org$", "test\\..*" ];  // regexp for whitelisted urls
 
 function isWhitelisted(uri) {
     var ret=false;
@@ -11,7 +17,6 @@ function isWhitelisted(uri) {
     }
     return ret;
 }
-
 
 addEventListener("fetch", async event=>{
     event.respondWith((async function() {
