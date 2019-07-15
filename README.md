@@ -1,5 +1,5 @@
 # cf-cors-anywhere
-Clodflare CORS porxy in a worker.
+Clodflare CORS proxy in a worker.
 
 Usage
 https://your_url.workers.dev/?uri
