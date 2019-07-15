@@ -49,7 +49,8 @@ addEventListener("fetch", async event=>{
 
             orig = event.request.headers.get("Origin");
             return new Response(
-                "Usage\n" 
+                "CF-CORS-ANYWHERE\n\n"
+                + "Usage\n" 
                 + origin_url.origin + "/?uri\n\n" 
                 + "Limits: 100,000 requests/day\n" 
                 + "          1,000 requests/10 minutes\n\n" 
