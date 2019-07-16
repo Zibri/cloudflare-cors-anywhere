@@ -2,7 +2,9 @@
 CORS Anywhere as a Cloudflare Worker!
 (c) 2019 by Zibri (www.zibri.org)
 email: zibri AT zibri DOT org
+https://github.com/Zibri/cloudflare-cors-anywhere
 */
+
 
 whitelist = [ "^http.?://www.zibri.org$", "zibri.org$", "test\\..*" ];  // regexp for whitelisted urls
 
@@ -68,8 +70,9 @@ addEventListener("fetch", async event=>{
                 }
 
                 return new Response(
-                    "CF-CORS-ANYWHERE\n\n"
-                    + "Usage\n" 
+                    "CLOUDFLARE-CORS-ANYWHERE\n\n"
+                    + "Source:\nhttps://github.com/Zibri/cloudflare-cors-anywhere\n\n"
+                    + "Usage:\n" 
                     + origin_url.origin + "/?uri\n\n" 
                     + "Limits: 100,000 requests/day\n" 
                     + "          1,000 requests/10 minutes\n\n" 
