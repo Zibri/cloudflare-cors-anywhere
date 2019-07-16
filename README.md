@@ -6,9 +6,10 @@ CLOUDFLARE-CORS-ANYWHERE
 Source:
 https://github.com/Zibri/cloudflare-cors-anywhere
 
-Usage:
-https://test.cors.workers.dev/?uri
+Demo:
+https://test.cors.workers.dev
 
 Limits: 100,000 requests/day
+
           1,000 requests/10 minutes
 
