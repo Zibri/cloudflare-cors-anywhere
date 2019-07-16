@@ -9,7 +9,5 @@ https://github.com/Zibri/cloudflare-cors-anywhere
 Demo:
 https://test.cors.workers.dev
 
-Limits: 100,000 requests/day
-
-          1,000 requests/10 minutes
-
+Post:
+http://www.zibri.org/2019/07/your-own-cors-anywhere-proxy-on.html
