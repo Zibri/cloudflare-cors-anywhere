@@ -84,7 +84,7 @@ addEventListener("fetch", async event=>{
                     );
             }
           } else {
-          	return new Response('403 Forbidden',{status: 403});
+          	return new Response(null,{status: 403,statusText: 'Forbidden'});
           }
     }
     )());
