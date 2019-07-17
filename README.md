@@ -1,5 +1,5 @@
-# cf-cors-anywhere
-Clodflare CORS proxy in a worker.
+# cloudflare-cors-anywhere
+Cloudflare CORS proxy in a worker.
 
 CLOUDFLARE-CORS-ANYWHERE
 
