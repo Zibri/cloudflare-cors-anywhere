@@ -46,7 +46,9 @@ addEventListener("fetch", async event=>{
 
                 var body = await response.arrayBuffer();
                 var init = {
-                    headers: myHeaders
+                    headers: myHeaders,
+                    status: response.status,
+                    statusText: response.statusText
                 };
                 return new Response(body,init);
 
