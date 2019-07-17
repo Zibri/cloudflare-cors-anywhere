@@ -25,8 +25,9 @@ addEventListener("fetch", async event=>{
         var origin_url = new URL(event.request.url);
 
         function fix(myHeaders) {
-            myHeaders.set("Access-Control-Allow-Origin", "*");
-            acrh = event.request.headers.get("access-control-request-headers");
+//            myHeaders.set("Access-Control-Allow-Origin", "*");
+                myHeaders.set("Access-Control-Allow-Origin", event.request.headers.get("Origin"));
+		acrh = event.request.headers.get("access-control-request-headers");
 
             if (acrh) {
                 myHeaders.set("Access-Control-Allow-Headers", acrh);
