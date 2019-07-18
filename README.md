@@ -16,6 +16,9 @@ Example:
 ```javascript
 fetch('https://test.cors.workers.dev/?https://httpbin.org/post', {
   method: 'post',
-  headers: { 'x-foo': 'bar' }
+  headers: { 'x-foo': 'bar', 'x-cors-headers': 'aditional headers' }
 }).then(r => r.json()).then(console.log)
 ```
+
+Note:
+All received headers are also returned in "cors-received-headers" header.
