@@ -20,14 +20,14 @@ function isWhitelisted(uri) {
     return ret;
 }
 
+
 addEventListener("fetch", async event=>{
-    event.respondWith((async function() {
         var origin_url = new URL(event.request.url);
 
         function fix(myHeaders) {
-//            myHeaders.set("Access-Control-Allow-Origin", "*");
-                myHeaders.set("Access-Control-Allow-Origin", event.request.headers.get("Origin"));
-		acrh = event.request.headers.get("access-control-request-headers");
+            //            myHeaders.set("Access-Control-Allow-Origin", "*");
+            myHeaders.set("Access-Control-Allow-Origin", event.request.headers.get("Origin"));
+            acrh = event.request.headers.get("access-control-request-headers");
 
             if (acrh) {
                 myHeaders.set("Access-Control-Allow-Headers", acrh);
@@ -40,9 +40,30 @@ addEventListener("fetch", async event=>{
         var fetch_url = unescape(origin_url.search.substr(1));
         var orig = event.request.headers.get("Origin");
         if (isWhitelisted(orig)) {
+
+            xheaders = event.request.headers.get("x-cors-headers");
+
+            if (xheaders != null) {
+                try {
+                    xheaders = JSON.parse(xheaders);
+                } catch (e) {}
+            }
+
             if (origin_url.search.startsWith("?")) {
-                var response = await fetch(fetch_url,event.request);
-                cors_headers=[];
+                recv_headers = {};
+                for (var pair of event.request.headers.entries()) {
+                    if ((pair[0].match("^cf-") == null) & (pair[0].match("^x-forw") == null) & (pair[0].match("^x-cors-headers") == null))
+                        recv_headers[pair[0]] = pair[1];
+                }
+                if (xheaders != null) {
+                    Object.entries(xheaders).forEach((c)=>recv_headers[c[0]] = c[1]);
+                }
+
+                newreq = new Request(event.request,{
+                    "headers": recv_headers
+                });
+                var response = await fetch(fetch_url,newreq);
+                cors_headers = [];
                 for (var pair of response.headers.entries()) {
                     cors_headers.push(pair[0]);
                 }
@@ -50,7 +71,7 @@ addEventListener("fetch", async event=>{
 
                 myHeaders = fix(myHeaders);
 
-                myHeaders.set("Access-Control-Expose-Headers",cors_headers.join(","));
+                myHeaders.set("Access-Control-Expose-Headers", cors_headers.join(","));
                 var body = await response.arrayBuffer();
                 var init = {
                     headers: myHeaders,
@@ -79,22 +100,24 @@ addEventListener("fetch", async event=>{
                 }
 
                 return new Response(
-                    "CLOUDFLARE-CORS-ANYWHERE\n\n"
-                    + "Source:\nhttps://github.com/Zibri/cloudflare-cors-anywhere\n\n"
-                    + "Usage:\n" 
-                    + origin_url.origin + "/?uri\n\n" 
-                    + "Limits: 100,000 requests/day\n" 
-                    + "          1,000 requests/10 minutes\n\n" 
-                    + (orig != null ? "Origin: " + orig + "\n" : "") 
-                    + "Ip: " + event.request.headers.get("CF-Connecting-IP") + "\n" 
-                    + (country ? "Country: " + country + "\n" : "") 
-                    + (colo ? "Datacenter: " + colo + "\n" : "") 
-                    + "\n",{status: 200, headers: myHeaders}
-                    );
+			"CLOUDFLARE-CORS-ANYWHERE\n\n" + 
+			"Source:\nhttps://github.com/Zibri/cloudflare-cors-anywhere\n\n" + 
+			"Usage:\n" + origin_url.origin + "/?uri\n\n" + 
+			"Limits: 100,000 requests/day\n" + 
+			"          1,000 requests/10 minutes\n\n" + 
+			(orig != null ? "Origin: " + orig + "\n" : "") + 
+			"Ip: " + event.request.headers.get("CF-Connecting-IP") + "\n" + 
+			(country ? "Country: " + country + "\n" : "") + 
+			(colo ? "Datacenter: " + colo + "\n" : "") + "\n" + 
+			((xheaders != null) ? "\nx-cors-headers: " + JSON.stringify(xheaders) : ""),
+			{status: 200, headers: myHeaders});
             }
-          } else {
-          	return new Response(null,{status: 403,statusText: 'Forbidden'});
-          }
+        } else {
+            return new Response(null,{
+                status: 403,
+                statusText: 'Forbidden'
+            });
+        }
     }
     )());
 });
