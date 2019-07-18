@@ -42,9 +42,15 @@ addEventListener("fetch", async event=>{
         if (isWhitelisted(orig)) {
             if (origin_url.search.startsWith("?")) {
                 var response = await fetch(fetch_url,event.request);
+                cors_headers=[];
+                for (var pair of response.headers.entries()) {
+                    cors_headers.push(pair[0]);
+                }
                 var myHeaders = new Headers(response.headers);
+
                 myHeaders = fix(myHeaders);
 
+                myHeaders.set("Access-Control-Expose-Headers",cors_headers.join(","));
                 var body = await response.arrayBuffer();
                 var init = {
                     headers: myHeaders,
