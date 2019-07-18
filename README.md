@@ -21,4 +21,5 @@ fetch('https://test.cors.workers.dev/?https://httpbin.org/post', {
 ```
 
 Note:
+
 All received headers are also returned in "cors-received-headers" header.
