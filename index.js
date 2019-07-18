@@ -22,6 +22,7 @@ function isWhitelisted(uri) {
 
 
 addEventListener("fetch", async event=>{
+    event.respondWith((async function() {
         var origin_url = new URL(event.request.url);
 
         function fix(myHeaders) {
@@ -62,16 +63,22 @@ addEventListener("fetch", async event=>{
                 newreq = new Request(event.request,{
                     "headers": recv_headers
                 });
+
                 var response = await fetch(fetch_url,newreq);
+                var myHeaders = new Headers(response.headers);
                 cors_headers = [];
+                allh = {};
                 for (var pair of response.headers.entries()) {
                     cors_headers.push(pair[0]);
+                    allh[pair[0]] = pair[1];
                 }
-                var myHeaders = new Headers(response.headers);
 
                 myHeaders = fix(myHeaders);
 
                 myHeaders.set("Access-Control-Expose-Headers", cors_headers.join(","));
+
+                myHeaders.append("cors-received-headers", JSON.stringify(allh));
+
                 var body = await response.arrayBuffer();
                 var init = {
                     headers: myHeaders,
@@ -110,7 +117,8 @@ addEventListener("fetch", async event=>{
 			(country ? "Country: " + country + "\n" : "") + 
 			(colo ? "Datacenter: " + colo + "\n" : "") + "\n" + 
 			((xheaders != null) ? "\nx-cors-headers: " + JSON.stringify(xheaders) : ""),
-			{status: 200, headers: myHeaders});
+			{status: 200, headers: myHeaders}
+		);
             }
         } else {
             return new Response(null,{
