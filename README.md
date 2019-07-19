@@ -19,8 +19,8 @@ Example:
 ```javascript
 fetch('https://test.cors.workers.dev/?https://httpbin.org/post', {
   method: 'post',
-  headers: { 'x-foo': 'bar', 'x-cors-headers': JSON.stringify('aditional header': 'value') }
-}).then(r => r.json()).then(console.log)
+  headers: { 'x-foo': 'bar', 'x-bar': 'foo', 'x-cors-headers': JSON.stringify({"additional_header": "value"}) }
+}).then(r => {console.log(JSON.parse(r.headers.get("cors-received-headers")));return r.json()}).then(console.log)
 ```
 
 Note:
