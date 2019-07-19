@@ -1,9 +1,6 @@
 # cloudflare-cors-anywhere
 Cloudflare CORS proxy in a worker.
 
-Deploy workers:
-https://workers.cloudflare.com/
-
 CLOUDFLARE-CORS-ANYWHERE
 
 Source:
@@ -14,6 +11,9 @@ https://test.cors.workers.dev
 
 Post:
 http://www.zibri.org/2019/07/your-own-cors-anywhere-proxy-on.html
+
+Deploy workers:
+https://workers.cloudflare.com/
 
 Example:
 ```javascript
