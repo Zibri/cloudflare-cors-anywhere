@@ -58,8 +58,15 @@ addEventListener("fetch", async event=>{
             if (origin_url.search.startsWith("?")) {
                 recv_headers = {};
                 for (var pair of event.request.headers.entries()) {
-                    if ((pair[0].match("^cf-") == null) & (pair[0].match("^x-forw") == null) & (pair[0].match("^x-cors-headers") == null))
+                    if (
+                        (pair[0].match("^origin") == null) & 
+                        (pair[0].match("eferer") == null) & 
+                        (pair[0].match("^cf-") == null) & 
+                        (pair[0].match("^x-forw") == null) & 
+                        (pair[0].match("^x-cors-headers") == null)
+                        )
                         recv_headers[pair[0]] = pair[1];
+
                     //   console.log(pair[0]+ ': '+ pair[1]);
                 }
                 if (xheaders != null) {
