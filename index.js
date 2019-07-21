@@ -9,8 +9,8 @@ https://github.com/Zibri/cloudflare-cors-anywhere
 whitelist = [ "^http.?://www.zibri.org$", "zibri.org$", "test\\..*" ];  // regexp for whitelisted urls
 */
 
-blacklist = [ ];                    // regexp for blacklisted urls
-whitelist = [ ".*" ];               // regexp for whitelisted origins
+blacklist = [ ];           // regexp for blacklisted urls
+whitelist = [ ".*" ];     // regexp for whitelisted origins
 
 function isListed(uri,listing) {
     var ret=false;
@@ -26,26 +26,32 @@ function isListed(uri,listing) {
 
 addEventListener("fetch", async event=>{
     event.respondWith((async function() {
+        isOPTIONS = (event.request.method == "OPTIONS");
         var origin_url = new URL(event.request.url);
 
         function fix(myHeaders) {
             //            myHeaders.set("Access-Control-Allow-Origin", "*");
-            myHeaders.set("Access-Control-Allow-Origin", event.request.headers.get("Origin"));
-            acrh = event.request.headers.get("access-control-request-headers");
+            myHeaders.append("Access-Control-Allow-Origin", event.request.headers.get("Origin"));
+            if (isOPTIONS) {
+                myHeaders.append("Access-Control-Allow-Methods", event.request.headers.get("access-control-request-method"));
+                acrh = event.request.headers.get("access-control-request-headers");
+                //myHeaders.set("Access-Control-Allow-Credentials", "true");
 
-            if (acrh) {
-                myHeaders.set("Access-Control-Allow-Headers", acrh);
-                myHeaders.set("Access-Control-Allow-Credentials", "true");
+                if (acrh) {
+                    myHeaders.append("Access-Control-Allow-Headers", acrh);
+                }
+
+                myHeaders.delete("X-Content-Type-Options");
             }
-
-            myHeaders.delete("X-Content-Type-Options");
             return myHeaders;
         }
-        var fetch_url = unescape(origin_url.search.substr(1));
+        var fetch_url = unescape(unescape(origin_url.search.substr(1)));
 
         var orig = event.request.headers.get("Origin");
+        
+        var remIp = event.request.headers.get("CF-Connecting-IP");
 
-        if ((!isListed(fetch_url,blacklist)) & (isListed(orig,whitelist))) {
+        if ((!isListed(fetch_url, blacklist)) & (isListed(orig, whitelist))) {
 
             xheaders = event.request.headers.get("x-cors-headers");
 
@@ -58,15 +64,8 @@ addEventListener("fetch", async event=>{
             if (origin_url.search.startsWith("?")) {
                 recv_headers = {};
                 for (var pair of event.request.headers.entries()) {
-                    if (
-                        (pair[0].match("^origin") == null) & 
-                        (pair[0].match("eferer") == null) & 
-                        (pair[0].match("^cf-") == null) & 
-                        (pair[0].match("^x-forw") == null) & 
-                        (pair[0].match("^x-cors-headers") == null)
-                        )
+                    if ((pair[0].match("^origin") == null) & (pair[0].match("eferer") == null) & (pair[0].match("^cf-") == null) & (pair[0].match("^x-forw") == null) & (pair[0].match("^x-cors-headers") == null))
                         recv_headers[pair[0]] = pair[1];
-
                     //   console.log(pair[0]+ ': '+ pair[1]);
                 }
                 if (xheaders != null) {
@@ -85,18 +84,23 @@ addEventListener("fetch", async event=>{
                     cors_headers.push(pair[0]);
                     allh[pair[0]] = pair[1];
                 }
-
+                cors_headers.push("cors-received-headers");
                 myHeaders = fix(myHeaders);
 
                 myHeaders.set("Access-Control-Expose-Headers", cors_headers.join(","));
 
                 myHeaders.append("cors-received-headers", JSON.stringify(allh));
 
-                var body = await response.arrayBuffer();
+                if (isOPTIONS) {
+                    var body = null;
+                } else {
+                    var body = await response.arrayBuffer();
+                }
+
                 var init = {
                     headers: myHeaders,
-                    status: response.status,
-                    statusText: response.statusText
+                    status: (isOPTIONS ? 200 : response.status),
+                    statusText: (isOPTIONS ? "OK" : response.statusText)
                 };
                 return new Response(body,init);
 
@@ -120,30 +124,32 @@ addEventListener("fetch", async event=>{
                 }
 
                 return new Response(
-                    "CLOUDFLARE-CORS-ANYWHERE\n\n" + 
-                    "Source:\nhttps://github.com/Zibri/cloudflare-cors-anywhere\n\n" + 
-                    "Usage:\n" + origin_url.origin + "/?uri\n\n" + 
-                    "Limits: 100,000 requests/day\n" + 
-                    "          1,000 requests/10 minutes\n\n" + 
-                    (orig != null ? "Origin: " + orig + "\n" : "") + 
-                    "Ip: " + event.request.headers.get("CF-Connecting-IP") + "\n" + 
-                    (country ? "Country: " + country + "\n" : "") + 
-                    (colo ? "Datacenter: " + colo + "\n" : "") + "\n" + 
-                    ((xheaders != null) ? "\nx-cors-headers: " + JSON.stringify(xheaders) : "")
-                    ,{status: 200, headers: myHeaders});
+                	"CLOUDFLARE-CORS-ANYWHERE\n\n" + 
+                	"Source:\nhttps://github.com/Zibri/cloudflare-cors-anywhere\n\n" + 
+                	"Usage:\n" + origin_url.origin + "/?uri\n\n" + 
+                	"Limits: 100,000 requests/day\n" + 
+                	"          1,000 requests/10 minutes\n\n" + 
+                	(orig != null ? "Origin: " + orig + "\n" : "") + 
+                	"Ip: " + remIp + "\n" + 
+                	(country ? "Country: " + country + "\n" : "") + 
+                	(colo ? "Datacenter: " + colo + "\n" : "") + "\n" + 
+                	((xheaders != null) ? "\nx-cors-headers: " + JSON.stringify(xheaders) : ""),
+                	{status: 200, headers: myHeaders}
+                );
             }
         } else {
 
+
             return new Response(
-                "Create your own cors proxy</br>\n" +
-                "<a href='https://github.com/Zibri/cloudflare-cors-anywhere'>https://github.com/Zibri/cloudflare-cors-anywhere</a>\n",
-                {
-                    status: 403,
-                    statusText: 'Forbidden',
-                    headers: {
-                        "Content-Type": "text/html"
-                    }
-                });
+		    "Create your own cors proxy</br>\n" + 
+		    "<a href='https://github.com/Zibri/cloudflare-cors-anywhere'>https://github.com/Zibri/cloudflare-cors-anywhere</a>\n",
+		    {
+                	status: 403,
+                	statusText: 'Forbidden',
+                	headers: {
+                    		"Content-Type": "text/html"
+                	}
+            });
         }
     }
     )());
