@@ -9,6 +9,9 @@ https://github.com/Zibri/cloudflare-cors-anywhere
 Demo:
 https://test.cors.workers.dev
 
+Donate:
+https://paypal.me/Zibri/5
+
 Post:
 http://www.zibri.org/2019/07/your-own-cors-anywhere-proxy-on.html
 
