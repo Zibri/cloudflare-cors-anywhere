@@ -51,7 +51,7 @@ addEventListener("fetch", async event=>{
         
         var remIp = event.request.headers.get("CF-Connecting-IP");
 
-        if ((!isListed(fetch_url, blacklist)) & (isListed(orig, whitelist))) {
+        if ((!isListed(fetch_url, blacklist)) && (isListed(orig, whitelist))) {
 
             xheaders = event.request.headers.get("x-cors-headers");
 
@@ -64,10 +64,14 @@ addEventListener("fetch", async event=>{
             if (origin_url.search.startsWith("?")) {
                 recv_headers = {};
                 for (var pair of event.request.headers.entries()) {
-                    if ((pair[0].match("^origin") == null) & (pair[0].match("eferer") == null) & (pair[0].match("^cf-") == null) & (pair[0].match("^x-forw") == null) & (pair[0].match("^x-cors-headers") == null))
-                        recv_headers[pair[0]] = pair[1];
-                    //   console.log(pair[0]+ ': '+ pair[1]);
+                    if ((pair[0].match("^origin") == null) && 
+			(pair[0].match("eferer") == null) && 
+			(pair[0].match("^cf-") == null) && 
+			(pair[0].match("^x-forw") == null) && 
+			(pair[0].match("^x-cors-headers") == null)
+		    ) recv_headers[pair[0]] = pair[1];
                 }
+		    
                 if (xheaders != null) {
                     Object.entries(xheaders).forEach((c)=>recv_headers[c[0]] = c[1]);
                 }
