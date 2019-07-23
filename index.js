@@ -31,14 +31,14 @@ addEventListener("fetch", async event=>{
 
         function fix(myHeaders) {
             //            myHeaders.set("Access-Control-Allow-Origin", "*");
-            myHeaders.append("Access-Control-Allow-Origin", event.request.headers.get("Origin"));
+            myHeaders.set("Access-Control-Allow-Origin", event.request.headers.get("Origin"));
             if (isOPTIONS) {
-                myHeaders.append("Access-Control-Allow-Methods", event.request.headers.get("access-control-request-method"));
+                myHeaders.set("Access-Control-Allow-Methods", event.request.headers.get("access-control-request-method"));
                 acrh = event.request.headers.get("access-control-request-headers");
                 //myHeaders.set("Access-Control-Allow-Credentials", "true");
 
                 if (acrh) {
-                    myHeaders.append("Access-Control-Allow-Headers", acrh);
+                    myHeaders.set("Access-Control-Allow-Headers", acrh);
                 }
 
                 myHeaders.delete("X-Content-Type-Options");
@@ -89,7 +89,7 @@ addEventListener("fetch", async event=>{
 
                 myHeaders.set("Access-Control-Expose-Headers", cors_headers.join(","));
 
-                myHeaders.append("cors-received-headers", JSON.stringify(allh));
+                myHeaders.set("cors-received-headers", JSON.stringify(allh));
 
                 if (isOPTIONS) {
                     var body = null;
