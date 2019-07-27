@@ -144,17 +144,18 @@ addEventListener("fetch", async event=>{
             }
         } else {
 
-
             return new Response(
-		    "Create your own cors proxy</br>\n" + 
-		    "<a href='https://github.com/Zibri/cloudflare-cors-anywhere'>https://github.com/Zibri/cloudflare-cors-anywhere</a>\n",
-		    {
-                	status: 403,
-                	statusText: 'Forbidden',
-                	headers: {
-                    		"Content-Type": "text/html"
-                	}
-            });
+                "Create your own cors proxy</br>\n" + 
+                "<a href='https://github.com/Zibri/cloudflare-cors-anywhere'>https://github.com/Zibri/cloudflare-cors-anywhere</a></br>\n" +
+                "\nDonate</br>\n" +
+                "<a href='https://paypal.me/Zibri/5'>https://paypal.me/Zibri/5</a>\n",
+                {
+                    status: 403,
+                    statusText: 'Forbidden',
+                    headers: {
+                        "Content-Type": "text/html"
+                    }
+                });
         }
     }
     )());
