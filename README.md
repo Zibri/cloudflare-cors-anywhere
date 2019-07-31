@@ -29,3 +29,10 @@ fetch('https://test.cors.workers.dev/?https://httpbin.org/post', {
 Note:
 
 All received headers are also returned in "cors-received-headers" header.
+
+Note about the DEMO url:
+
+Abuse (other than testing) of the demo will result in a ban.  
+The demo accepts only fetch and xmlhttprequest.  
+To create your own is very easy, you just need to set up a cloudflare account and upload the worker code.  
+
