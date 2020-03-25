@@ -26,7 +26,7 @@ function isListed(uri,listing) {
 
 addEventListener("fetch", async event=>{
     event.respondWith((async function() {
-        isOPTIONS = (event.request.method == "OPTIONS");
+        var isOPTIONS = (event.request.method == "OPTIONS");
         var origin_url = new URL(event.request.url);
 
         function fix(myHeaders) {
