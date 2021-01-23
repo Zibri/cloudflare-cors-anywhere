@@ -48,6 +48,7 @@ Note about the DEMO url:
 Abuse (other than testing) of the demo will result in a ban.  
 The demo accepts only fetch and xmlhttprequest.  
 
-My personal thanks to Damien Collis for his generous and unique donation.  
 To create your own is very easy, you just need to set up a cloudflare account and upload the worker code.  
+
+My personal thanks to Damien Collis for his generous and unique donation.    
 
