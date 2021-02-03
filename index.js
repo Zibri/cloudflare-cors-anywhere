@@ -45,7 +45,7 @@ addEventListener("fetch", async event=>{
             }
             return myHeaders;
         }
-        var fetch_url = unescape(unescape(origin_url.search.substr(1)));
+        var fetch_url = decodeURIComponent(decodeURIComponent(origin_url.search.substr(1)));
 
         var orig = event.request.headers.get("Origin");
         
