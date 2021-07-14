@@ -4,7 +4,7 @@ AWS Lambda CORS proxy.
 AWS-CORS-ANYWHERE
 
 Source:
-https://github.com/Zibri/cloudflare-cors-anywhere
+https://github.com/Zibri/cloudflare-cors-anywhere/tree/aws_lambda
 
 Donate:
 https://paypal.me/Zibri/5
