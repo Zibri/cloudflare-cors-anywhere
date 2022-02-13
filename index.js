@@ -77,6 +77,7 @@ addEventListener("fetch", async event=>{
                 }
 
                 newreq = new Request(event.request,{
+                    "redirect": "follow",
                     "headers": recv_headers
                 });
 
