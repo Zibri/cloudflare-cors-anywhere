@@ -76,6 +76,13 @@ addEventListener("fetch", async event=>{
                     Object.entries(xheaders).forEach((c)=>recv_headers[c[0]] = c[1]);
                 }
 
+                if (cookies != null) {
+                    recv_headers["Cookie"] = cookies;
+                }
+                if (host != null) {
+                    recv_headers["Host"] = host;
+                }
+
                 newreq = new Request(event.request,{
                     "redirect": "follow",
                     "headers": recv_headers
