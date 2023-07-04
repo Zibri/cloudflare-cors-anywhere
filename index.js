@@ -76,7 +76,7 @@ addEventListener("fetch", async event=>{
                     Object.entries(xheaders).forEach((c)=>recv_headers[c[0]] = c[1]);
                 }
 
-                if (cookies != null) {
+                if (typeof cookies == "undefined") {
                     recv_headers["Cookie"] = cookies;
                 }
                 if (host != null) {
