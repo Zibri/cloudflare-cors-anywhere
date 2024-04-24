@@ -15,10 +15,16 @@ https://paypal.me/Zibri/5
 Post:
 http://www.zibri.org/2019/07/your-own-cors-anywhere-proxy-on.html
 
-Deploy workers:
-https://workers.cloudflare.com/
+## Deployment
 
-Example:
+This project is written in [Cloudfalre Workers](https://workers.cloudflare.com/), and can be easily deployed with [Wrangler CLI](https://developers.cloudflare.com/workers/wrangler/install-and-update/).
+
+```bash
+wrangler publish
+```
+
+## Usage Example
+
 ```javascript
 fetch('https://test.cors.workers.dev/?https://httpbin.org/post', {
   method: 'post',
