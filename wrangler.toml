@@ -1,3 +1,6 @@
 name = "cloudflare-cors-anywhere"
 main = "index.js"
 compatibility_date = "2023-04-17"
+# wrangler.toml (wrangler v3.88.0^)
+[observability.logs]
+enabled = false
