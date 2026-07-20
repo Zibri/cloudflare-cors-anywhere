@@ -1,3 +1,5 @@
+[![](https://deploy.workers.cloudflare.com/button)](https://dash.cloudflare.com/?to=/:account/workers-and-pages/create/deploy-to-workers&repository=https://github.com/Zibri/cloudflare-cors-anywhere)
+
 # cloudflare-cors-anywhere
 Cloudflare CORS proxy in a worker.
 
